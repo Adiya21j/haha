@@ -99,6 +99,7 @@ UPLOAD_FORM_HTML = """
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+
         if self.path == '/':
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -119,7 +120,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             with open(os.path.join(UPLOAD_DIRECTORY, 'uploaded.bin'), 'rb') as f:
                 self.wfile.write(f.read())
         else:
-            self.send_error(404, "File not found")
+            self.send_response(200)
+            self.send_header('Content-type','text/plain')
+            self.end_headers()
+            self.wfile.write('Hello, world!'.encode('utf-8'))
         return
 
     def do_POST(self):
@@ -155,10 +159,10 @@ def run(server_class=HTTPServer, handler_class=RequestHandler, port=8000):
     httpd.serve_forever()
     return 
 
-if __name__ == "__main__":
-    if not os.path.exists(UPLOAD_DIRECTORY):
-        os.makedirs(UPLOAD_DIRECTORY)
-    run()
+# if __name__ == "__main__":
+#     if not os.path.exists(UPLOAD_DIRECTORY):
+#         os.makedirs(UPLOAD_DIRECTORY)
+#     run()
 
 # from http.server import BaseHTTPRequestHandler
 
